@@ -1,5 +1,9 @@
+const http = require('http')
 const app = require('./server/server');
-
-app.listen(4000, () => {
+const bot = require('./server/bot');
+const server = http.Server(app);
+bot(server)
+server.listen(4000, () => {
   console.log('Listening');
 });
+

@@ -1,45 +1,45 @@
 const graphql = require('graphql');
 const { GraphQLObjectType, GraphQLString, GraphQLID } = graphql;
 const mongoose = require('mongoose');
-const Song = mongoose.model('song');
-const Lyric = mongoose.model('lyric');
-const SongType = require('./song_type');
-const LyricType = require('./lyric_type');
+const Client = mongoose.model('client');
+const Transaction = mongoose.model('transaction');
+const ClientType = require('./client_type');
+const TransactionType = require('./transaction_type');
 
 const mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
-    addSong: {
-      type: SongType,
+    addClient: {
+      type: ClientType,
       args: {
         title: { type: GraphQLString }
       },
       resolve(parentValue, { title }) {
-        return (new Song({ title })).save()
+        return (new Client({ title })).save()
       }
     },
-    addLyricToSong: {
-      type: SongType,
+    addTransactionToClient: {
+      type: ClientType,
       args: {
         content: { type: GraphQLString },
-        songId: { type: GraphQLID }
+        clientId: { type: GraphQLID }
       },
-      resolve(parentValue, { content, songId }) {
-        return Song.addLyric(songId, content);
+      resolve(parentValue, { content, clientId }) {
+        return Client.addTransaction(clientId, content);
       }
     },
-    likeLyric: {
-      type: LyricType,
-      args: { id: { type: GraphQLID } },
-      resolve(parentValue, { id }) {
-        return Lyric.like(id);
+    statusTransaction: {
+      type: TransactionType,
+      args: { id: { type: GraphQLID }, status: { type: GraphQLString } },
+      resolve(parentValue, { id, status }) {
+        return Transaction.status(id, status);
       }
     },
-    deleteSong: {
-      type: SongType,
+    deleteClient: {
+      type: ClientType,
       args: { id: { type: GraphQLID } },
       resolve(parentValue, { id }) {
-        return Song.remove({ _id: id });
+        return Client.remove({ _id: id });
       }
     }
   }
