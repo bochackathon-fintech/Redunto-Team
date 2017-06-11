@@ -15,3 +15,4 @@ const ModelClass = mongoose.model('user', userSchema)
 // export the model
 
 module.exports = ModelClass
+
